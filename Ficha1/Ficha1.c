@@ -57,7 +57,7 @@ void dois(int n) {
 }
 
 /*
-3. Escreva duas fun¸c˜oes que desenham triangulos (usando o caracter #). O resultado da
+3. Escreva duas funcoes que desenham triangulos (usando o caracter #). O resultado da
 #
 ##
 ###
@@ -74,16 +74,14 @@ void dois(int n) {
  #######
 #########
 
-Defina cada uma dessas fun¸c˜oes (com o nome triangulo), num ficheiro separado (vertical.c
+Defina cada uma dessas funcoes (com o nome triangulo), num ficheiro separado (vertical.c
 e horizontal.c). Compile esses dois ficheiros (usando o comando gcc -c) separadamente.
 
 Compile este programa (com o comando gcc -c triangulo.c). Construa (e use) agora
-dois execut´aveis, usando os comandos
+dois executaveis, usando os comandos
 • gcc -o t1 triangulo.o vertical.o
 • gcc -o t2 triangulo.o horizontal.o
 */
-
-
 
 
 
