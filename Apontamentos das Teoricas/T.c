@@ -416,7 +416,6 @@ int partition (int v[], int N){
 			 	   r     i             N-1
 
 	Depois do ciclo while:
-	          _  _ _ _ _ _ _ ... _ _ _ X
 
 			 <= <= <= > > > ? ... ? ? ? X
 			 	      ^     ^           ^
