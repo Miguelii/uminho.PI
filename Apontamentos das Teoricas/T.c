@@ -597,6 +597,110 @@ Como vimos no ctutor, esta implementaçao é lenta porque qualquer chamada à st
 
 // ********************** T12 (15 de abril) *************************
 
+a é um endereço de uma struct que tem um campo b
+Em C, existe uma abreviatura para (*a).b
+Em vez de escrever (*a).b é costume escrever a->b
+Nota: Só se pode escrever a->b quando a é um endereço de uma struct que tem um campo b
+
+void push(int x, STACK *s ) {
+	//(*s).valores[(*s).quantos++] = x;
+	s->valores[s->quantos++] = x;
+}
+
+void pop(STACK *s) {
+	//(*s).quantos--;
+	s->quantos--;
+}	
+
+int top(STACK *s) {
+	//return ((*s).valores[(*s).quantos - 1]);
+	return (s->valores[s->quantos - 1]);
+}
+
+int empty(STACK *s) {
+	//return ((*s).quantos == 0);
+	return (s->quantos == 0);
+} 
+
+int main() {
+  STACK s1;
+  int aaa;
+  s1.quantos = 0;
+  push (3,&s1);
+  aaa = top (&s1);
+  return 0;
+}
+
+
+Se a nossa struct for assim:
+
+typedef struct stack { 
+	int valores [10];
+	int quantos;
+} STACK, *SStack; 
+
+Define dois tipos:
+	STACK que é o mesmo de struct stack
+	SStack que é endereço de STACK
+
+Então, podemos escrever isto:
+
+void push(int x, SStack s ) {
+	s->valores[s->quantos++] = x;
+}
+
+Igual para o pop, top e empty...
+
+
+--- implementaçao de stacks um bocadinho melhor ---
+
+#include <stdlib.h>
+
+-> 2 funçoes que vamos falar:
+	"Eu preciso de memoria"
+	"Já nao preciso desta memoria"
+
+typedef struct stack {
+	int N; //Campo N que vai ser o tamanho do array que o *valores está a apontar
+	int *valores; // valores é um array de tamanho N
+	int quantos;
+} STACK, *SStack; 
+
+
+void initStack(SStack s, int tamanho) {
+	s->valores = (int *) malloc(tamanho * sizeof(int)); // o (int *) nao é necessário
+	s->N = tamanho;
+}
+
+void push(int x, SStack s ) {
+	s->valores[s->quantos++] = x;
+}
+
+void pop(SStack s) {
+	s->quantos--;
+}
+
+int top(SStack s) {
+	return (s->valores[s->quantos - 1]);
+}
+
+int empty(SStack s) {
+	return (s->quantos == 0);
+} 
+
+
+int main() {
+  STACK s1;
+  int aaa;
+  initStack(&s1,10);
+  s1.quantos = 0;
+  push (3,&s1);
+  aaa = top (&s1);
+
+  free(s1.valores);	// Sempre que alocamos memoria é boa prática ter o cuidado de a desalocar quando já nao precisamos
+  			// No entanto, quando o main acaba toda a memoria que foi alocada é deslocada.
+  return 0;
+}
 
 
 
