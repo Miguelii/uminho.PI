@@ -19,6 +19,8 @@ Com esta estratégia o valor de hash da string "abc" passaria a ser 590 = 97*1+9
 Com esta estratégia qual seria o valor de hash da string "programacao imperativa"?
 */
 
+// Resolução:
+
 int hash(char s[]) {
     int r = 0;
     int i = 1;
