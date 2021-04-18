@@ -1,5 +1,11 @@
 #include <stdio.h>
+/* Enunciado Pergunta 2
 
+Considerando que n = 39 quantas parcelas do somatório calculado são números oblongos? 
+Um número é oblongo se é igual ao produto de 2 inteiros consecutivos. Por exemplo 6 é um número oblongo porque 6 = 2*3.
+*/
+
+// Resolução:
 
 int oblongos(int n) {
     int f=0;
