@@ -702,5 +702,104 @@ int main() {
   return 0;
 }
 
+// ********************** T13 (20 de abril) *************************
+
+--- Recapitulando o ultimo episodio ---
+
+Memória não automatica (Heap)
+
+malloc (para reservar memoria)
+	(realloc, calloc)
+
+free (para libertar memória)
+
+---------------------------------------
+
+
+--- Estruturas de Dados ---
+
+-> Listas em C:
+
+Inspirar no tipo do Haskell
+
+[Int] = []  | Int : [Int]
+
+Requisitos: como representar a lista vazia?
+			como representar listas não vazias
+
+Existe um endereço especial para identificar listas vazias -> NULL
+
+#include <stdio.h>
+
+typedef struct lista {
+	int valor;	// Cabeça da lista
+	struct lista* cauda;
+} *Lista;
+
+int main() {
+	Lista x,y,z;
+
+	// x = []
+	x = NULL;
+
+	// y = [42]
+	y = malloc(sizeof(struct lista));
+	(*y).valor = 42;
+	y->cauda = NULL;
+
+	// z = [1,2,3]
+	// Funciona, mas ninguem tem a paciencia para fazer isto tudo
+	z = malloc(sizeof(struct lista));
+	z->valor = 1;
+	z->cauda = malloc(sizeof(struct lista));
+	z->cauda->valor = 2;
+	z->cauda->cauda = malloc(sizeof(struct lista));
+	z->cauda->cauda->valor = 3;
+	z->cauda->cauda->cauda = NULL;
+
+	return 0;
+}
+
+
+-> Uma cena melhor:
+#include <stdio.h>
+
+typedef struct lista {
+	int valor;
+	struct lista * prox;
+} *Lista;
+
+Lista newLista(int x, Lista l) {	// Adiciona um elemento no inicio (cabeça) da lista
+	Lista r;
+	r = malloc(sizeof(struct lista));
+	r->valor = x;
+	r->prox = l;
+	return r;
+}
+
+Lista fromArray (int v[], int N) {
+	// Constroi uma lista com os N elementos de v
+	// A fazer na proxima aula
+}
+
+int main() {
+	Lista x,y,z;
+
+	// x = []
+	x = NULL;
+
+	// y = [42]
+	y = malloc(sizeof(struct lista));
+	(*y).valor = 42;
+	y->prox = NULL;
+
+	// z = [1,2,3]
+	z = NULL;
+	z = newLista(3,z);
+	z = newLista(2,z);
+	z = newLista(1,z);
+
+	return 0;
+}
 
 
