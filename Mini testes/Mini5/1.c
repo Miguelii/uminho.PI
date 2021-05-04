@@ -14,7 +14,7 @@ LInt newLInt (int x, LInt xs) {
   return r;
 }
 
-// 1) Testar se uma lista está ordenada por ordem crescente ACHO EU
+// 1) Testar se uma lista está ordenada por ordem crescente
 
 int sorted (LInt l) {
   int r = 1;
