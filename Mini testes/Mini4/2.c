@@ -9,6 +9,8 @@ Por exemplo, para n = 6 o bubble sort faria 11 swaps.
 
 // Resolução:
 
+// Nota: Tem um bug qualquer nos swaps e não faço ideia o que é
+
 #include <stdio.h>
 #include <stdlib.h>
 
