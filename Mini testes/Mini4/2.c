@@ -7,9 +7,14 @@ Para n = 73 se quisermos ordenar as parecelas por ordem decrescente usando o alg
 Por exemplo, para n = 6 o bubble sort faria 11 swaps.
 */
 
-// Resolução:
+/* Resolução:
 
-// Nota: Tem um bug qualquer nos swaps e não faço ideia o que é
+Primeiro dar printf às parcelas
+Na main, criar um array e copiar as parcelas para lá
+No bubbleSort adicionar um contador, para contar os swaps, e um printf no fim
+Por fim, fazer o bubbleSort do array que criamos com as parcelas e ver quantos swaps efetua
+
+*/
 
 #include <stdio.h>
 #include <stdlib.h>
