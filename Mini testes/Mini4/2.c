@@ -14,8 +14,7 @@ Na main, criar um array e copiar as parcelas para lá
 No bubbleSort adicionar um contador, para contar os swaps, e um printf no fim
 Por fim, fazer o bubbleSort do array que criamos com as parcelas e ver quantos swaps efetua
 
-
-O bubblesort e o swap foram feitos nas aulas teoricas, mas podiam buscar um codigo qualquer na net para poupar tempo.
+Nota : O bubblesort e o swap foram feitos nas aulas teoricas, mas podiam buscar um codigo qualquer na net para poupar tempo.
 */
 
 #include <stdio.h>
