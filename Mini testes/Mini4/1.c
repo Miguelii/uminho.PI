@@ -1,5 +1,7 @@
 #include <stdio.h>
-/*  Relembre a seguinte função.
+/*  Enunciado Pergunta 1
+
+Relembre a seguinte função.
 
 int sumhtpo (int n){
   int r = 0;
@@ -15,7 +17,14 @@ Esta função calcula um somatório. Para n = 97 a menor parcela desse somatóri
 
 */
 
-// Resolução
+/* Resolução:
+
+Fazer um prinf para ver todas as parcelas, depois bastava fazer copy paste para um site qualquer na net de sort e ver qual era a 30ª menor/maior
+
+Nota: Muito cuidado com a localização do printf, tem que ser antes do valor n ser alterado.
+
+Neste caso, para n=97, a 30ª menor é 122.
+*/
 
 int main() {
     int r=0;
