@@ -18,7 +18,7 @@ This function computes a sum. For instance, if n == 6, the computed sum has 8 it
 For n = 27 how many items has the computed sum?
 */
 
-// resolução:
+// resolução: É só colocar um contador nas parcelas
 
 int main() {
     int r=0;
