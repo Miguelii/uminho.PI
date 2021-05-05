@@ -551,6 +551,7 @@ B x;           <- x é uma variavel do tipo B i.e., int
 // diferenças de struct
 int s;         <- s é uma variavel do tipo int
 char s;        <- s é uma variavel do tipo char
+
 struct stack {
 	int valores [100];
 	int quantos;
@@ -593,6 +594,7 @@ int main() {
 }
 
 Como vimos no ctutor, esta implementaçao é lenta porque qualquer chamada à struct cria uma copia
+
 -> Proxima aula ver como melhorar com recurso a apontadores;
 
 // ********************** T12 (15 de abril) *************************
@@ -698,9 +700,10 @@ int main() {
   aaa = top (&s1);
 
   free(s1.valores);	// Sempre que alocamos memoria é boa prática ter o cuidado de a desalocar quando já nao precisamos
-  			// No entanto, quando o main acaba toda a memoria que foi alocada é deslocada.
+  					// No entanto, quando o main acaba toda a memoria que foi alocada é deslocada.
   return 0;
 }
+
 
 // ********************** T13 (20 de abril) *************************
 
@@ -762,6 +765,7 @@ int main() {
 
 
 -> Uma cena melhor:
+
 #include <stdio.h>
 
 typedef struct lista {
@@ -775,11 +779,6 @@ Lista newLista(int x, Lista l) {	// Adiciona um elemento no inicio (cabeça) da 
 	r->valor = x;
 	r->prox = l;
 	return r;
-}
-
-Lista fromArray (int v[], int N) {
-	// Constroi uma lista com os N elementos de v
-	// A fazer na proxima aula
 }
 
 int main() {
@@ -802,4 +801,251 @@ int main() {
 	return 0;
 }
 
+Lista fromArray (int v[], int N) {
+	// Constroi uma lista com os N elementos de v
+	// A fazer na proxima aula
+}
 
+// ********************** T14 (22 de abril) *************************
+
+#include <stdio.h>
+
+typedef struct lista {
+	int valor;
+	struct lista * prox;
+} *Lista;
+
+Lista newLista(int x, Lista l) {	// Adiciona um elemento no inicio (cabeça) da lista
+	Lista r;
+	r = malloc(sizeof(struct lista));
+	r->valor = x;
+	r->prox = l;
+	return r;
+}
+
+
+Lista fromArray (int v[], int N) {
+	// Constroi uma lista com os N elementos de v
+	Lista r;
+	int i;
+
+	/* Ordem inversa
+	for (i=0; i<N; i++)
+		newLista (v[i],r);
+	*/
+
+	// ordem como está o array
+	for (i=N-1; i>=0; i--)
+		newLista (v[i],r);
+
+	return r;
+}
+
+int main() {
+	Lista x;
+	int a[5] = {1,22,33,44,55};
+
+	x = fromArray(a,5);
+
+
+
+	return 0;
+}
+
+
+-- Definição recursiva para o fromArray: --
+
+Lista fromArray (int v[], int N) {
+	Lista r = NULL;
+
+	if (N>0) {
+		r = newLista (v[0],fromArray(v+1,N-1));
+	}
+
+	return r;
+}
+
+
+Lista cloneL(Lista l) {
+	Lista r;
+
+	if (l==NULL) r=NULL;
+	else {
+		r = newLista (l->valor, cloneL(l->prox));
+	}
+
+	return r;
+}
+
+
+int main() {
+	Lista x,y;
+	int a[5] = {1,22,33,44,55};
+
+	x = fromArray(a,5);
+	y = cloneL(x);
+
+	return 0;
+}
+
+// ********************** T15 (27 de abril) *************************
+
+--- Função não recursiva do cloneL ---
+
+Lista cloneL (Lista l) {
+	Lista r, ult, nova;
+
+	if (l==NULL) r=NULL;
+	else {
+		r = malloc (sizeof (struct lista));
+		r->valor = l->valor;
+		ult = r;
+		l = l->prox;
+
+		while (l != NULL) {
+			ult->prox = malloc (sizeof (struct lista));
+			ult = ult->prox;
+			ult->valor = l->valor;
+			l = l->prox;
+		}
+		ult->prox=NULL;
+	}
+	return r;
+}
+
+>> Exsite um truque para simplificar este código (duplo endereçamento)
+
+Lista cloneL (Lista l) {
+	Lista r, ult, *sitio; 
+
+	// primeiro sitio onde quero atribuir o valor de uma "caixa"
+	sitio = &r;
+
+	while (l != NULL) {
+		// onde vou guardar o malloc? i.e, o endereço da caixa
+		*sitio = malloc (sizeof (struct lista));
+
+		//Preencher a "caixa"
+		(*sitio)->valor = l->valor;
+		l = l->prox;
+
+		//O que falta actualizar?
+		// nao podemos fazer sitio->prox porque o sitio nao é do tipo Lista
+		sitio = &(*sitio)->prox;
+	}
+	*sitio = NULL;
+
+	return r;
+}
+
+
+// ********************** T16 (29 de abril) *************************
+
+--- Função que insere ordenadamente um elemento numa lista ---
+
+Lista insereOrd(Lista l, int x) {
+	// l está ordenada 
+
+	Lista nova, pt=l, ant;
+
+	// criar célula para novo elemento
+	nova = malloc(sizeof (struct lista));
+	nova->valor = x;
+
+	// Para garantir que implementaçao não falha quando tentamos inserir uma celula menor do que todas as outras
+	if (l == NULL || l->valor > x) {
+		// inserir no inicio
+		nova->prox = l;
+		l=nova;
+	}
+
+	// percorrer a lista até encontrar um elemento maior do que x
+	while (pt != NULL && pt->valor < x) {
+		ant = pt;
+		pt=pt->prox;
+	}
+
+	// inserir a célula nesse sitio da lista
+	nova->prox = pt;
+	ant->prox = nova;
+
+	return l;
+}
+
+
+>> Versão mais compacta do insereOrd que usa a mesma estratégia do cloneL (duplo endereçamento)
+
+Lista insereOrd(Lista l, int x) {
+	// l está ordenada 
+
+	Lista nova, *sitio;
+
+	// criar célula para novo elemento
+	nova = malloc(sizeof (struct lista));
+	nova->valor = x;
+
+	sitio = &l;
+
+	while (*sitio != NULL && (*sitio)->valor < x) {
+		sitio = &((*sitio)->prox);
+	}
+
+	nova->prox = *sitio;
+	*sitio = nova;
+
+	return l;
+}
+
+>> o professor Alcino diz que gosta mais da função declarada assim:
+
+int insereOrd(Lista *l, int x) {
+	// l está ordenada 
+	// sucesso se possivel
+
+	Lista nova;
+
+	// criar célula para novo elemento
+	nova = malloc(sizeof (struct lista));
+	nova->valor = x;
+
+	while (*l != NULL && (*l)->valor < x) {
+		l = &((*l)->prox);
+	}
+
+	nova->prox = *l;
+	*l = nova;
+
+	return 0;
+}
+
+
+int main() {
+	Lista x,y;
+	int a[5] = {10,22,33,44,55};
+
+	x = fromArray(a,5);
+	y = insereOrd(x,3);
+
+	return 0;
+}
+
+
+// ********************** T17 (4 de maio) *************************
+
+int remove (Lista *l, int x) {
+	// l está ordenada
+	int r = 0;
+	Lista pt = *l, ant;
+
+	// percorrer a lista até encontrar
+	while (pt != NULL && pt->valor < x) {
+		ant = pt;
+		pt = pt->prox;
+	}
+
+	
+
+	
+
+	return r;
+}
