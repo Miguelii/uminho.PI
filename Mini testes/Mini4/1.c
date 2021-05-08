@@ -15,9 +15,8 @@ int sumhtpo (int n){
 
 Esta função calcula um somatório. Para n = 97 a menor parcela desse somatório é 2. A 2ª menor é 4. Qual é a 30ª menor parcela?
 
-*/
 
-/* Resolução:
+Resolução:
 
 Fazer um prinf para ver todas as parcelas, depois bastava fazer copy paste para um site qualquer na net de sort e ver qual era a 30ª menor/maior
 
