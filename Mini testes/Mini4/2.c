@@ -5,9 +5,9 @@
 Para n = 73 se quisermos ordenar as parecelas por ordem decrescente usando o algoritmo bubble sort quantas operações de swap seriam realizadas?
 
 Por exemplo, para n = 6 o bubble sort faria 11 swaps.
-*/
 
-/* Resolução:
+
+Resolução:
 
 Primeiro dar printf às parcelas
 Na main, criar um array e copiar as parcelas para lá
