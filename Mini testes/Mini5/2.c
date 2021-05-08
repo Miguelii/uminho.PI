@@ -5,17 +5,15 @@ typedef struct slist {
   struct slist * prox;
 } *LInt;
 
-LInt newLInt (int x, LInt xs) {
-  LInt r = malloc (sizeof(struct slist));
-  if (r!=NULL) {
-    r->valor = x;
-    r->prox = xs;
-  }
-  return r;
-}
+/* 2) Apaga o último elemento de uma lista não vazia e devolve o endereço da cabeça da lista resultante
 
-// Apaga o último elemento de uma lista não vazia
-// e devolve o endereço da cabeça da lista resultante
+Era indiferente fazer o free(b) antes de colocar o indice do a NULL ou depois
+
+if (a) {free(b); a->prox = NULL; a = l;}
+free(b); if (a) {a->prox = NULL; a = l;} Correta
+free(b); if (a) a->prox = NULL; a = l; 
+if (a) {a->prox = NULL; a = l;} free(b); Correta
+*/
 
 LInt init (LInt l) {
   LInt a = NULL;
@@ -25,5 +23,6 @@ LInt init (LInt l) {
     b = b->prox;
   }
   free(b); if (a) {a->prox = NULL; a = l;}
+  // if (a) {a->prox = NULL; a = l;} free(b);
   return a;
 }

@@ -5,28 +5,24 @@ typedef struct slist {
   struct slist * prox;
 } *LInt;
 
-LInt newLInt (int x, LInt xs) {
-  LInt r = malloc (sizeof(struct slist));
-  if (r!=NULL) {
-    r->valor = x;
-    r->prox = xs;
-  }
-  return r;
-}
+/* 1) Testar se uma lista está ordenada por ordem crescente
 
-// 1) Testar se uma lista está ordenada por ordem crescente
+As opçoes com l->valor no inicio não davam porque l->valor nao está a apontar para nenhum valor
+
+O correto seria fazer l->prox->valor, ou o equivalente que está nas opçoes.
+
+if (l->prox) if (l->valor > l->prox->valor) r = 0; Correta
+if (l->prox && l->valor > l->prox->valor) r = 0; Correta
+if (l->valor > l->prox->valor && l->prox) r = 0;
+if (l->valor > l->prox->valor) r = 0; else r = 1;
+*/
 
 int sorted (LInt l) {
   int r = 1;
   while (l && r) {
     if (l->prox && l->valor > l->prox->valor) r = 0;
+    //if (l->prox) if (l->valor > l->prox->valor) r = 0;
     l = l->prox;
   }
   return 1;
 }
-
-	
-//if (l->prox) if (l->valor > l->prox->valor) r = 0;	
-//if (l->prox && l->valor > l->prox->valor) r = 0;
-//if (l->valor > l->prox->valor && l->prox) r = 0;
-//if (l->valor > l->prox->valor) r = 0; else r = 1;
