@@ -7,10 +7,6 @@ typedef struct slist {
 
 /* 1) Testar se uma lista está ordenada por ordem crescente
 
-As opçoes com l->valor no inicio não davam porque l->valor nao está a apontar para nenhum valor
-
-O correto seria fazer l->prox->valor, ou o equivalente que está nas opçoes.
-
 if (l->prox) if (l->valor > l->prox->valor) r = 0; Correta
 if (l->prox && l->valor > l->prox->valor) r = 0; Correta
 if (l->valor > l->prox->valor && l->prox) r = 0;
