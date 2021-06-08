@@ -1,4 +1,3 @@
-
 //1
 void le_seq () {
     int max = 0;
@@ -90,56 +89,31 @@ char *mystrcat (char s1[], char s2[]) {
 //8
 char *mystrcpy (char *dest, char source []) {
     int i;
-    for (i = 0; source[i] != 0; i++) {
+    for (i = 0; source[i] != '\0'; i++) {
         dest[i] = source[i];
     }
-    dest[i] = 0;
+    dest[i] = '\0';
     return dest;
 }
 
 //9
-int mystrcmp (char s1 [], char s2 []) {
-    int i = 0;
-    while (i != -1){
-        if (s1[i] == 0 && s2[i] == 0)
-            return 0;
-        else if (s1[i] == 0 && s2[i] != 0)
-            return -1;
-        else if (s1 [i] != 0 && s2 [i] == 0)
-            return 1;
-        else if (s1 [i] > s2 [i])
-            return 1;
-        else if (s1 [i] < s2 [i])
-            return -1;
-        i++;
-    }
-    return 0;
+int mystrcmp(char s1[], char s2[]) {
+    int i;
+    for(i = 0; s1[i] != '\0' && s2[i] != '\0' && s1[i] == s2[i]; i++);
+    return s1[i]-s2[i];
 }
 
 //10
-char  *mystrstr (char s1 [], char s2 []) {
-    int isThere = 1;
-    char *ans = s1;
-    char *aux = s2;
-
-    while (*s2 && *s1) {
-        if (*s1 != *s2) {
-            isThere = 0;
-            ans = s1;
-        }
-        if (*s1 == *s2) {
-            if (!isThere) {
-                isThere = 1;
-                ans = s1;
-            }
-            s2++;
-        }
-        s1++;
+char *mystrstr(char s1[], char s2[]) {
+    char *res = NULL;
+    int i,p;
+    if (s2[0] == '\0') return s1;
+    for(i = 0; s1[i] != '\0' && res == NULL; i++) {
+        for(p = 0; s2[p] != '\0' && s2[p] == s1[i+p];p++);
+        if (s2[p] == '\0')
+            res = s1 + i;
     }
-    if (isThere && !(*s2)) {
-        return ans;
-    }
-    else return NULL;
+    return res;
 }
 
 //11
@@ -152,17 +126,24 @@ void mystrrev (char s[]) {
     for (int k = 0; k < i; k++) s[k] = aux[k];
 }
 
-void tail(char* s) {
-    for(; *s; s++)
-        *s = *(s+1);
-}
-
 //12
-void mystrnoV (char s[]) {
-    for (int i = 0; s[i]; i++) {
-        if (s[i] == 'A' || s[i] == 'a' || s[i] == 'E' || s[i] == 'e' || s[i] == 'I' || s[i] == 'i'
-        || s[i] == 'O' || s[i] == 'o' || s[i] == 'U' || s[i] == 'u') tail(&s[i]);
+void strnoV (char t[]){
+    int i, pos;
+    for (i = 0, pos = 0; t[i] != '\0';i++) {
+        if (t[i] != 'a' &&
+            t[i] != 'e' &&
+            t[i] != 'i' &&
+            t[i] != 'o' &&
+            t[i] != 'u' &&
+            t[i] != 'A' &&
+            t[i] != 'E' &&
+            t[i] != 'I' &&
+            t[i] != 'O' &&
+            t[i] != 'U') {
+            t[pos++] = t[i];
+        }
     }
+    t[pos] = '\0';
 }
 
 //13
@@ -177,6 +158,10 @@ void truncW (char t[], int n) {
     } 
 }
 
+
+
+//14
+
 int freqC (char ch, char s[]) {
     int count = 0;
     for (int i = 0; s[i]; i++) {
@@ -185,7 +170,6 @@ int freqC (char ch, char s[]) {
     return count;
 }
 
-//14
 char charMaisfreq (char s[]) {
     char maisfreq = 0;
     int freqMax = 0, freq;
@@ -198,35 +182,43 @@ char charMaisfreq (char s[]) {
     return maisfreq;
 }
 
-int contaFromHere (char s[]) {
-    int count = 1;
-    for (int i = 1; s[i]; i++) {
-        if (s[i] == s[i-1]) count++;
-        else break;
-    }
-    return count;
-}
-
 //15
+
 int iguaisConsecutivos (char s[]) {
-    int count = 0, max = -1;
-    for (int i = 0; s[i]; i++) {
-        if ((count = contaFromHere (&s[i])) > max) max = count;
+    int consec = 1, max = 0;
+    for(int i = 0; s[i]; i++) {
+        if(s[i] == s[i + 1]) consec++;
+        else {
+            if(consec > max) max = consec;
+            consec = 1;
+        }
     }
     return max;
 }
 
 //16
-int difConsecutivos (char s[]) {
-    int count = 1, max = -1;
-    for (int i = 0; s[i]; i++) {
-        if (s[i] != s[i+1]) count++;
-        else {
-            if (count > max) max = count;
-            count = 1;
+
+int not_in_prev(char str[], int k, int n) {
+    int ans = 1;
+    for(int i = k; i < n; i++) {
+        if(str[i] == str[n]) {
+            return 0;
         }
     }
-    return max;
+    return ans;
+}
+
+int difConsecutivos(char s[]) {
+    int ans = 0;
+    for(size_t i = 0; s[i]; i++) {
+        int consec = 0;
+        for(size_t j = i; s[j]; j++) {
+            if(not_in_prev(s,i,j)) consec++;
+            else break;
+        }
+        if (consec > ans) ans = consec;
+    }
+    return ans;
 }
 
 //17
@@ -257,11 +249,16 @@ int sufPref (char s1[], char s2[]) {
 
 //20
 int contaPal (char s[]) {
-    int count = 1;
-    for (int i = 0; s[i]; i++) {
-        if (s[i] == ' ') count++;
+    int inWord = 0, total = 0;
+    for(int i = 0; s[i]; i++) {
+        if(s[i] == ' ' || s[i] == '\n') {
+            if(inWord) total++;
+            inWord = 0;
+        }
+        else inWord = 1;
     }
-    return count;
+    if(inWord) total++;
+    return total;
 }
 
 //21
@@ -276,22 +273,25 @@ int contaVogais (char s[]) {
 
 //22
 int contida (char a[], char b[]) {
-    int true;
-    for (int i = 0; a[i]; i++) {
-        true = 0;
-        for (int j = 0; b[j]; j++) {
-            if (b[j] == a[i]) true = 1;
+    int cont = 1;
+    for(int i = 0; a[i]; i++) {
+        int pertence = 0;
+        for(int j = 0; b[j]; j++) {
+            if(a[i] == b[j]) pertence = 1;
         }
-        if (!true) return true;
+        if(!pertence) {
+            cont = 0;
+            break;
+        }
     }
-    return true;
+    return cont;
 }
 
 //23
-int palindroma (char s[]) {
+int palindrome (char s[]) {
     int len = 0;
-    for (len = 0; s[len]; len++);
-    for (int i = 0, j = len-1; s[i]; i++, j--) if (s[i] != s[j]) return 0;
+    for(int i = 0; s[i]; i++) len++;
+    for(int i = 0; s[i]; i++) if(s[i] != s[len - 1 - i]) return 0;
     return 1;
 }
 
@@ -301,7 +301,7 @@ int remRep (char x[]) {
     int i = 1;
     char prev = x[0];
     while(x[i]) {
-        if(x[i] == prev) tail(&x[i]);
+        if(x[i] == prev) tail(x + i);
         else prev = x[i++];
     }
     return i;
@@ -378,35 +378,42 @@ int retiraNeg (int v[], int N) {
     return N;
 }
 
-int countFreq(int v[], int N, int x) {
-    int count = 0;
-    for (int i = 0; i < N; i++) {
-        if (v[i] == x) count++;
-    }
-    return count;
-}
 //30
+
 int menosFreq (int v[], int N) {
-    int min = 10000, count, res;
-    for (int i = 0; i < N; i++) {
-        if ((count = countFreq(v, N, v[i])) < min) { 
-            min = count;
-            res = v[i];
+    int freq = 1, minFreq = N, ans = v[0], i;
+    for(i = 1; i < N; i++) {
+        if(v[i] == v[i - 1]) freq++;
+        if(v[i] != v[i - 1]) {
+            if(freq < minFreq) {
+                minFreq = freq;
+                ans = v[i - 1];
+            }
+            freq = 1;
         }
     }
-    return res;
+    if(freq < minFreq) {
+        minFreq = freq;
+        ans = v[i - 1];
+    }
+    return ans;
 }
 
 //31
-int elimRepOrd (int v[], int n) {
-    for (int i = 0; i < n-1; i++) {
-        if (v[i] == v[i+1]) {
-            for (int j = i; j < n; j++) v[j] = v[j+1];
-            n--;
-            i--;
+
+int maisFreq (int v[], int N) {
+    int freq = 1, maxFreq = 0, ans = v[0];
+    for(int i = 1; i < N; i++) {
+        if(v[i] == v[i - 1]) freq++;
+        if(v[i] != v[i - 1]) {
+            if(freq > maxFreq) {
+                maxFreq = freq;
+                ans = v[i - 1];
+            }
+            freq = 1;
         }
     }
-    return n;
+    return ans;
 }
 
 //32
@@ -423,6 +430,9 @@ int maxCresc (int v[], int N) {
     return max;
 }
 
+
+
+//33
 int checkForPresence (int v[], int idx, int x) {
     int i;
     for (i = 0; i < idx; i++) {
@@ -431,7 +441,6 @@ int checkForPresence (int v[], int idx, int x) {
     return 0;
 }
 
-//33
 int elimRep (int v[], int n) {
     int i, j;
     for (i = 0; i < n; i++) {
@@ -474,78 +483,69 @@ int comunsOrd (int a[], int na, int b[], int nb) {
 
 //36
 int comuns (int a[], int na, int b[], int nb) {
-    int count = 0;
-    for (int i = 0; i < na; i++) {
-        int equals = 0;
-        for (int j = 0; j < nb; j++) {
-            if (a[i] == b[j]) equals = 1;
-        }
-        if (equals) count++;
+    int ans = 0;
+    for(int i = 0; i < na; i++) {
+        int belongs = 0;
+        for(int j = 0; j < nb; j++) if(a[i] == b[j]) belongs = 1;
+        if(belongs) ans++;
     }
-    return count;
+    return ans;
 }
 
 //37 
 int minInd (int v[], int n) {
-    int min = 1000000, i, res = -1;
-    for (i = 0; i < n; i++) 
-        if (v[i] < min) {
-            min = v[i];
-            res = i;
-        }
-    return res;
+    int minIndex = 0;
+    for(int i = 1; i < n; i++) 
+        if(v[i] < v[minIndex]) 
+            minIndex = i;
+    return minIndex;
 }
 
 //38
 void somasAc (int v[], int Ac [], int N) {
-    int soma = 0, i, k;
-    for (i = 0; i < N; i++) {
-        soma += v[i];
-        Ac[i] = soma;
+    for(int i = 0; i < N; i++) {
+        Ac[i] = 0;
+        for(int j = 0; j <= i; j++) {
+            Ac[i] += v[j];
+        }
     }
 }
 
 //39
 int triSup (int N, float m [N][N]) {
-    int i, j;
-    for (i = 0; i < N; i++) {
-        for (j = 0; j < i; j++) {
-            if (m[i][j]) != 0 return 0;
+    int x = 1;
+    for(int i = 0; i < N; i++) {
+        for(int j = 0; j < i; j++) {
+            if(m[i][j]) x = 0;
         }
     }
-    return 1;
+    return x;
 }
 
 //40
-void transposta (int N, float m [N][N]) {
-    int i, j;
-    float transposta [N][N];
-    for (i = 0; i < N; i++) {
-        for (j = 0; j < N; j++) {
-            transposta[j][i] = m[i][j];
-        }
-    }
-    for (i = 0; i < N; i++) {
-        for (j = 0; j < N; j++) {
-            m[i][j] = transposta[i][j];
+void transposta (int N, float m[N][N]) {
+    for(int i = 0; i < N; i++) {
+        for(int j = 0; j < i; j++) {
+            float temp = m[i][j];
+            m[i][j] = m[j][i];
+            m[j][i] = temp;
         }
     }
 }
 
 //41
-void addTo (int N, int M, int a [N][M], int b[N][M]) {
-    int i, j;
-    for (i = 0; i < N; i++) {
-        for (j = 0; j < M; j++) 
-            a[i][j] += b[i][j]; 
+void addTo (int N, int M, int a[N][M], int b[N][M]) {
+    for(int i = 0; i < N; i++) {
+        for(int j = 0; j < M; j++) {
+            *(*(a + i)+j) += b[i][j];
+        }
     }
 }
 
 //42
 int unionSet (int N, int v1[N], int v2[N], int r[N]) {
     int len = 0;
-    int i = 0;
-    for (i = 0; i < N; i++) {
+    for(int i = 0; i < N; i++) {
         r[i] = v1[i] || v2[i];
         len += r[i];
     }
@@ -553,10 +553,9 @@ int unionSet (int N, int v1[N], int v2[N], int r[N]) {
 }
 
 //43
-int intersectSet (int N, int v1[N], int v2[N], int r[N]) {
+int intersectSet (int N, int v1[N], int v2[N],int r[N]) {
     int len = 0;
-    int i = 0;
-    for (i = 0; i < N; i++) {
+    for(int i = 0; i < N; i++) {
         r[i] = v1[i] && v2[i];
         len += r[i];
     }
@@ -564,30 +563,29 @@ int intersectSet (int N, int v1[N], int v2[N], int r[N]) {
 }
 
 //44
-int intersectMSet (int N, int v1[N], int v2[N], int r[N]) {
-    int len = 0; 
-    int i = 0; 
-    for (i = 0; i < N; i++) {
+int intersectMSet (int N, int v1[N], int v2[N],int r[N]) {
+    int len = 0;
+    for(int i = 0; i < N; i++) {
         r[i] = v1[i] < v2[i] ? v1[i] : v2[i];
-        len += r[i];
+        len += r[i]; 
     }
     return len;
 }
 
 //45
 int unionMSet (int N, int v1[N], int v2[N], int r[N]) {
-    int len = 0, i;
-    for (i = 0; i < N; i++) {
-        r[i] = v2[i] + v1[i];
-        len += r[i];
+    int len = 0;
+    for(int i = 0; i < N; i++) {
+        r[i] = v1[i] + v2[i];
+        len += r[i]; 
     }
     return len;
 }
 
 //46
 int cardinalMSet (int N, int v[N]) {
-    int len, i;
-    for (i = 0; i < N; i++) len += v[i];
+    int len = 0;
+    for(int i = 0; i < N; i++) len += v[i];
     return len;
 }
 
@@ -598,21 +596,12 @@ typedef enum movimento {Norte, Oeste, Sul, Este} Movimento;
 
 //47
 Posicao posFinal (Posicao inicial, Movimento mov[], int N) {
-    int i;
-    for (i = 0; i < N; i++) {
-        switch(mov[i]) {
-            case Norte:
-                inicial.y++;
-                break;
-            case Sul:
-                inicial.y--;
-                break;
-            case Oeste:
-                inicial.x--;
-                break;
-            default:
-                inicial.x++;
-        }
+    for(int i = 0; i < N; i++) {
+        Movimento x = mov[i];
+        if(x == Norte) inicial.y++;
+        if(x == Este) inicial.x++;
+        if(x == Sul) inicial.y--;
+        if(x == Oeste) inicial.x--;
     }
     return inicial;
 }
@@ -620,54 +609,56 @@ Posicao posFinal (Posicao inicial, Movimento mov[], int N) {
 
 //48
 int caminho (Posicao inicial, Posicao final, Movimento mov[], int N) {
-    for (int i = 0; i < N; i++) {
-        if (inicial.x < final.x) {
-            inicial.x++;
+    int* xi = &inicial.x;
+    int* yi = &inicial.y;
+    int xf = final.x, yf = final.y, i;
+    for(i = 0; i < N; i++) {
+        if((*xi) < xf) {
+            (*xi)++;
             mov[i] = Este;
         }
-        else if (inicial.x > final.x) {
-            inicial.x--;
+        else if ((*xi) > xf) {
+            (*xi)--;
             mov[i] = Oeste;
-        }
-        else if (inicial.y < final.y) {
-            inicial.y++;
+        } 
+        else if ((*yi) < yf) {
+            (*yi)++;
             mov[i] = Norte;
         }
-        else if (inicial.y > final.y) {
-            inicial.y --;
+        else if ((*yi) > yf) {
+            (*yi)--;
             mov[i] = Sul;
         }
         else break;
     }
-    if (final.x != inicial.x || final.y != inicial.y) return -1;
-    
-    return i;
+    if(inicial.x != final.x || inicial.y != final.y) return -1;
+    else return i;
 }
 
-int getDistancia (Posicao pos1, Posicao pos2) {
-	return abs(pos1.x - pos2.x) + abs(pos1.y - pos2.y);}
 
 //49
-int maiscentral (Posicao pos[], int N) {
-    int i, aux;
-    int res = -1;
-    int min = 1000000;
-    Posicao centro;
-    centro.x = 0;
-    centro.y = 0;
-    for (i = 0; i < N; i++) 
-        if ((aux = getDistancia(centro, pos[i])) < min) {
-            min = aux;
-            res = i;
+
+int manDist(int x, int y, int x0, int y0) {
+    return abs(x - x0) + abs(y - y0);
+}
+
+int maisCentral (Posicao pos[], int N) {
+    int minDist = manDist(pos[0].x,pos[0].y,0,0);
+    int ans = 0, i;
+    for(i = 1; i < N; i++) {
+        if(manDist(pos[i].x,pos[i].y,0,0) < minDist) {
+            ans = i;
+            minDist = manDist(pos[i].x,pos[i].y,0,0);
         }
-    return res;
+    }
+    return ans;
 }
 
 //50
 int vizinhos (Posicao p, Posicao pos[], int N) {
-    int res = 0;
-    for (int i = 0; i < N; i++) {
-        if (getDistancia(p, pos[i]) == 1) res++;
+    int ans = 0;
+    for(int i = 0; i < N; i++) {
+        if(manDist(pos[i].x,pos[i].y,p.x,p.y) == 1) ans++;
     }
-    return res;
+    return ans;
 }
