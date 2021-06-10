@@ -1032,20 +1032,233 @@ int main() {
 
 // ********************** T17 (4 de maio) *************************
 
-int remove (Lista *l, int x) {
-	// l está ordenada
-	int r = 0;
-	Lista pt = *l, ant;
-
-	// percorrer a lista até encontrar
+Lista removoOrd (lista l, int x) {
+	Lista pt, ant;
+	// assumir que a lista está ordenada
+	//procurar x em l
+	pt = l;
 	while (pt != NULL && pt->valor < x) {
 		ant = pt;
 		pt = pt->prox;
 	}
+	if (pt != NULL && pt->valor == x) {
+		//encontrado
+		if(pt != l) ant->prox = pt->prox;
+		else l = l->prox;
+		free(pt);
+	}
+	else {
+		//nao existe
+	}
+	return l;
+}
 
-	
+// versao alternativa
 
-	
+Lista removoOrd2 (lista l, int x) {
+	Lista pt, *sitio;
+	// assumir que a lista está ordenada
+	//procurar x em l
+	sitio = &l;
+	while (*sitio != NULL && (*sitio)->valor < x) {
+		sitio = &((*sitio)->prox);
+	}
 
+	if (*sitio != NULL && (*sitio)->valor == x) {
+		//encontrado
+		pt = *sitio;
+		*sitio = (*sitio)->prox;
+		free(pt);
+	}
+	else {
+		//nao existe
+	}
+	return l;
+}
+
+
+--- Arvores binarias de inteiros ---
+
+
+typedef struct arvore {
+	int valor;
+	struct arvore *esq, *dir;
+} *Arv;
+
+
+Exemplo:
+
+int compLista (Lista l) { // calcula quanto elementos tem a lista
+	int r = 0;
+	while(l != NULL) {
+		l = l->prox;
+		r++;
+	}
 	return r;
 }
+
+int compArv (Arv a) { // calcula quanto elementos tem a arvore
+	int r = 0;
+	if(a != NULL) r = 1 + compArv(a->esq) + compArv(a->dir);
+	return r;
+}
+
+//Para testar
+int main() {
+	int a[5] = {10,20,30,40,50}
+	Arv arv;
+
+	arv = malloc(sizeof(struct arvore));
+	arv->valor = 30;
+	arv->esq = arv->dir = NULL;
+	return 0;
+}
+
+
+Arv arvfromArray (int v[], int N) { //produzir uma arvore dado um array
+	Arv r = NULL;
+	int m = N/2;
+	if (N>0) {
+		r = malloc(sizeof(struct arvore));
+		r->valor = v[m];
+		r->esq = arvfromArray(v,m);
+		r->dir = arvfromArray(v+m+1,N-m-1);
+	}
+	return r;
+}
+
+
+// ********************** T18 (6 de maio) *************************
+
+
+int travessiaParaArray(Arv a, int v[], int N) {
+	// retorna o numero de elementos escritos no array
+	int r=0;
+	if (a == NULL);
+	else {
+		v[r] = a->valor;
+		r++;
+		r += travessiaParaArray(a->esq,v+r,N-r);
+		r += travessiaParaArray(a->dir,v+r,N-r);
+	}
+	return r;
+}
+
+//A mesma funçao mas agora com travessia inorder (primeiro a esq, depois a raiz e depois a dir)
+int travessiaParaArrayInorder(Arv a, int v[], int N) {
+	// retorna o numero de elementos escritos no array
+	int r=0;
+	if (a == NULL);
+	else {
+		r += travessiaParaArray(a->esq,v+r,N-r);
+		if (r<N) {
+			v[r] = a->valor;
+			r++;
+			r += travessiaParaArray(a->dir,v+r,N-r);
+		}
+	}
+	return r;
+}
+
+//Para testar
+int main() {
+	int a[7] = {10,20,30,40,50,60,70} , b[10];
+	Arv arv;
+
+	arv = arvfromArray(a,4);
+	travessiaParaArray(arv,b,4);
+	return 0;
+}
+
+
+--- Arvores de Procura ---
+
+int search (Arv a, int x) {
+	// retorna verdadeiro se x existir em a
+	int r;
+	if (a == NULL) r = 0;
+	if (a->valor == x) r = 1;
+	if (a->valor > x) 
+		r = search(a->esq,x);
+	else 
+		r = search(a->dir,x);
+	return r;
+}
+
+
+// ********************** T19 (11 de maio) *************************
+
+
+int search (Arv a, int x) {
+	// retorna verdadeiro se x existir em a
+	while(a != NULL && a->valor != x)
+		if(a->valor > x)
+			a = a->esq;
+		else a = a->dir;
+	return (a!=NULL);
+}
+
+
+// Fazer uma funçao para inserir um novo elemnto numa BST
+
+Arv insere (Arv a, int x) {
+	if (a == NULL){
+		a = malloc(sizeof(struct arvore));
+		a->valor = x;
+		a->esq = a->dir = NULL;
+	}
+	else if (x < a->valor)
+			a->esq = insere(a->esq,x);
+		else
+			a->dir = insere(a->dir,x);
+	return a;
+}
+
+// versao iterativa
+
+Arv insere (Arv a, int x) {
+	Arv pt = a, ant;
+	while (pt != NULL) {
+		if (x < pt->valor)
+			pt = pt->esq;
+		else pt = pt->dir;
+	}
+	pt = malloc(sizeof(struct arvore));
+	pt->valor = x;
+	pt->esq = pt->dir = NULL;
+
+	if(a != NULL) {
+		if (x < ant->valor)
+			ant->esq = pt;
+		else
+			ant->dir = pt;
+	}
+	else a = pt;
+
+	return a; 
+}
+
+// Podemos pegar nesta versao iterativa e usar duplo endereçamento
+
+Arv insere (Arv a, int x) {
+	Arv *sitio ;
+	sitio = &a;
+	while(*sitio != NULL) {
+		if(x < (*sitio)->valor)
+			sitio = &((*sitio)->esq);
+		else sitio = &((*sitio)->dir);
+	}
+	(*sitio) = malloc(sizeof(struct arvore));
+	(*sitio)->valor = x;
+	(*sitio)->esq = (*sitio)->dir = NULL;
+
+	return a;
+}
+
+
+
+// ********************** T20 (13 de maio) *************************
+
+// ********************** T21 (13 de maio) *************************
+
+As ultimas duas aulas foi a falar sobre memoria e ficheiros
