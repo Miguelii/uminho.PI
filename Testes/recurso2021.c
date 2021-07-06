@@ -1,3 +1,5 @@
+#include <stdio.h>
+#include <stdlib.h>
 
 // 1) 
 
@@ -24,6 +26,10 @@ int paresImpares (int v[], int N){
 }
 
 // 2)
+typedef struct lligada {
+    int valor;
+    struct lligada *prox;
+} *LInt, Nodo;
 
 void merge (LInt *r, LInt a, LInt b) {
     while(a!=NULL && b!=NULL) {
@@ -44,17 +50,14 @@ void merge (LInt *r, LInt a, LInt b) {
 
 // 3)
 
-void latino (int N, int m[N][N]){
-  int i;
-  int j;
-  for (i=0;i<N;i++){
-    for (j=0;j<N;j++){
-      if ((i+j)<N) m[i][j] = j+i+1;
-      else m[i][j] = j+i+1-N;
+void latino (int N, int m[N][N]) {
+  for (int i = 0; i < N; i++) {
+    for (int j = 0; j < N; j++) {
+      if ((i+j)<N) m[i][j] = i+j+1;
+      else m[i][j] = i+j+1-N;
     }
   }
 }
-
 
 // 4) 
 
@@ -64,15 +67,23 @@ typedef struct nodo {
 } *ABin;
 
 ABin next (ABin a) {
-  if (a == NULL) return NULL;
+    if (a == NULL) return NULL;
+    
+    if (a->dir == NULL && a->pai == NULL) {
+        return NULL;
+    }else if (a->dir == NULL && a->pai->dir == a) {
+        if (a->pai->pai != NULL) {
+          return a->pai->pai;
+        }
+        return NULL;
+    } else if (a->dir == NULL && a->pai->esq == a) {
+        return a->pai;
+    }
 
-  if (a->dir == NULL && a->pai->dir == a) return NULL;
-  else if (a->dir == NULL && a->pai->esq == a) return a->pai;
-
-  return a->dir;
+    return a->dir;
 }
 
-// 5)
+// 5) Nao está 100% correta  
 
 typedef struct palavras {
   char *palavra;
@@ -83,7 +94,7 @@ struct palavras *esq, *dir;
 int acrescentaPal (Palavras *p, char *pal) {
     int cmp = strcmp(p, pal->palavra);
     if (cmp == 0) {
-        pal->n0corr += 1;
+        pal->nOcorr += 1;
         return pal->n0corr;
     } else if (cmp < 0) {
         return acrescentaPal(p, pal->esq);
