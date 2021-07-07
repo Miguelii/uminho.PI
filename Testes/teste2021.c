@@ -68,7 +68,6 @@ int procura (LInt *l, int x) {
             temp->prox = *l;
             *l = temp;
             r = 1;
-
         }
         inicio = &((*inicio)->prox);
     }

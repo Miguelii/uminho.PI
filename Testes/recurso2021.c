@@ -29,7 +29,7 @@ int paresImpares (int v[], int N){
 typedef struct lligada {
     int valor;
     struct lligada *prox;
-} *LInt, Nodo;
+} *LInt;
 
 void merge (LInt *r, LInt a, LInt b) {
     while(a!=NULL && b!=NULL) {
