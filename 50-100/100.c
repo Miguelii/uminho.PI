@@ -113,7 +113,6 @@ void merge (LInt *r, LInt l1, LInt l2){
 // 8) 10/10
 
 void splitQS (LInt l, int x, LInt *mx, LInt *Mx){
-    //... completar
     while(l!=NULL) {
         if(l->valor <x) {
             *mx = l;
@@ -129,4 +128,115 @@ void splitQS (LInt l, int x, LInt *mx, LInt *Mx){
     *Mx = NULL;
 }
 
+// 9) 10/10
+
+LInt parteAmeio (LInt *l) {
+  LInt ant, r = *l;
+  int i, size = length(*l);
+
+  for (i=0; i<size/2; ++i) {
+    ant = *l;
+    *l = (*l)->prox;
+  }
+
+  if (i==0) r = NULL;
+  else ant->prox = NULL;
+
+  return r;
+}
+
+// 10) 10/10
+
+
+int removeAll (LInt *l, int x){
+    
+    int count = 0;
+    
+    while(*l!= NULL) {
+        if((*l)->valor == x) {
+            *l = (*l)->prox;
+            count++;
+        }
+        else {
+          l = &((*l)->prox);
+        }
+    }
+    
+    
+    return count;
+}
+
+// 11) 10/10
+
+int repetido(int N, int v[], int x) {
+    
+    int i;
+    for(i=0;i<N && v[i] != x;i++);
+    
+    if(i==N) return 0;
+    else return 1;
+}
+
+int removeDups (LInt *l){
+    
+    int index = 0;
+    int ocurrencias[length(*l)];
+    int count = 0;
+    
+    while(*l!=NULL && (*l)->prox) {
+        if(repetido(index+1,ocurrencias,(*l)->valor) == 1) {
+            LInt tmp = NULL;
+            tmp = *l;
+            (*l) = (*l)->prox;
+            free(tmp);
+            count++;
+        } else {
+            ocurrencias[index++] = (*l)->valor;
+            l = &((*l)->prox);
+        }
+    }
+    return count;
+}
+
+// 12) 10/10
+
+int removeMaiorL (LInt *l){
+    
+    int maior = (*l)->valor;
+    LInt *aux = l;
+    
+    if((*l) == NULL) return 0;
+    
+    //Encontrar maior elem
+    while((*aux)!=NULL) {
+        if((*aux)->valor > maior) {
+            maior = (*aux)->valor;
+            aux = &((*aux)->prox);
+        } else {
+            aux = &((*aux)->prox);
+        }
+    }
+    
+    //remover o maior elem
+    while((*l)->valor != maior) l = &((*l)->prox);
+    LInt tmp = *l;
+    *l = (*l)->prox;
+    free(tmp);
+    
+    return maior;
+}
+
+int main() {
+  LInt l = NULL;
+  
+  l = newLInt(3,l);
+  l = newLInt(2,l);
+  l = newLInt(1,l);
+  
+  removeOneOrd(&l,3);
+  procura(&l,2);
+  l = insert(3,l);
+
+  return 0;
+}
 
