@@ -1,70 +1,100 @@
 #include <stdio.h>
 #include <stdlib.h>
-
-// 1) 
-
-void swap (int *x, int *y){
-     int a;
-     a = *x;
-     *x = *y;
-     *y = a;
-}
-
-int paresImpares (int v[], int N){
-  int i;
-  int j;
-  for (i=0;i<N;i++){
-    if (v[i] % 2 != 0){
-      for (j=i+1;j<N;j++){
-        if (v[j] % 2 == 0){
-          swap (&v[i],&v[j]);
-          break;
-        }
-      }
-    }
-  }
-}
-
-// 2)
-typedef struct lligada {
-    int valor;
-    struct lligada *prox;
-} *LInt;
-
-void merge (LInt *r, LInt a, LInt b) {
-    while(a!=NULL && b!=NULL) {
-        if(a->valor < b->valor) {
-            *r = a;
-            r = &((*r)->prox);
-            a = a->prox;
-        }
-        else {
-            *r = b;
-            r = &((*r)->prox);
-            b = b->prox;
-        }
-    }
-    if(a==NULL) *r = b;
-    else *r = a;
-}
-
-// 3)
-
-void latino (int N, int m[N][N]) {
-  for (int i = 0; i < N; i++) {
-    for (int j = 0; j < N; j++) {
-      if ((i+j)<N) m[i][j] = i+j+1;
-      else m[i][j] = i+j+1-N;
-    }
-  }
-}
-
-// 4) 
+#include <string.h>
 
 typedef struct nodo {
   int valor;
   struct nodo *pai, *esq, *dir;
 } *ABin;
+
+typedef struct lligada {
+	int valor;
+	struct lligada *prox;
+} *LInt, Celula;
+
+typedef struct palavras {
+  char *palavra;
+  int nOcorr;
+struct palavras *esq, *dir;
+} *Palavras;
+
+
+LInt newLInt (int x, LInt xs){
+    LInt r = malloc(sizeof(Celula));
+    if (r!=NULL) {
+        r->valor = x; r->prox = xs;
+    }
+    return r;
+}
+// -----------------------------------
+
+//PERGUNTA 1
+//Versão sem usar array auxiliar, mas muito ineficiente!
+
+int paresImpares(int v[],int N) {
+  int aux[N];
+  
+  int i=0;
+  int j=0;
+  for(i=0;i<N;i++) {
+    for(j=i+1;j<N;j++) {
+      if(v[j] % 2 == 0) {
+        int aux = v[i];
+        v[i] = v[j];
+        v[j] = aux;
+      }
+    }
+  }
+  
+  int k;
+  for(k=0;v[k]%2==0;k++);
+  
+  return k;
+}
+
+
+//PERGUNTA 2
+
+void merge (LInt *r, LInt l1, LInt l2){
+    
+    while(l1!=NULL && l2 != NULL) {
+        if(l1->valor < l2->valor) {
+            *r = l1;
+            l1 = l1->prox;
+            r = &((*r)->prox);
+            
+            
+        } else {
+            *r = l2;
+            l2 = l2->prox;
+            r = &((*r)->prox);
+        }
+    }
+    
+    if(l1==NULL) *r = l2;
+    else *r = l1;
+    
+}
+
+//PERGUNTA 3
+
+void latino(int N, int m[N][N]) {
+  int i;
+  int j;
+  
+  for(int i=0;i<N;i++) {
+    for(int j=0;j<N;j++) {
+      if(i+j+1 > N) {
+        m[i][j] = i+j+1-N;
+      }
+      else {
+        m[i][j] = i+j+1;
+      }
+    }
+  }
+}
+
+// Pergunta 4
 
 ABin next (ABin a) {
     if (a == NULL) return NULL;
@@ -85,12 +115,6 @@ ABin next (ABin a) {
 
 // 5) Nao está 100% correta  
 
-typedef struct palavras {
-  char *palavra;
-  int nOcorr;
-struct palavras *esq, *dir;
-} *Palavras;
-
 int acrescentaPal (Palavras *p, char *pal) {
     int cmp = strcmp(p, pal->palavra);
     if (cmp == 0) {
@@ -101,4 +125,17 @@ int acrescentaPal (Palavras *p, char *pal) {
     } else {
         return acrescentaPal(p, pal->dir);
     }
+}
+
+
+int main() {
+
+    //Pergunta 1
+    int v[] = {1,2,3,4,5,6,7,8,9};
+    int res = paresImpares(v,9);
+
+    //Pergunta 2
+    int m[3][3];
+    latino(3,m);
+
 }
