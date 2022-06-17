@@ -1,3 +1,168 @@
+// 1)
+
+int um() {
+
+    int num;
+
+    printf("Indira o elem \n");
+    scanf("%d",&num);
+
+    int maior = num;
+
+    while(num != 0) {
+        scanf("%d",&num);
+        if(num>maior) maior = num;
+    }
+
+    return maior;
+}
+
+int dois() {
+    int num;
+    int soma;
+    int count = 0;
+
+    printf("Indira o elem \n");
+    scanf("%d",&num);
+
+    soma += num;
+    count++;
+
+    while(num != 0) {
+        scanf("%d",&num);
+        soma += num;
+        count++;
+    }
+
+    int media = soma/(count-1);
+    return media;
+}
+
+int tres() {
+    int num;
+
+    printf("Indira o elem \n");
+    scanf("%d",&num);
+
+    int maior = num;
+    int segundomaior = 0;
+
+    while(num != 0) {
+        scanf("%d",&num);
+        if(num>maior) {
+            segundomaior = maior;
+            maior = num;
+        }
+    }
+
+    return segundomaior;
+
+}
+
+// 4)
+int bitsUm (unsigned int n);
+
+// 5)
+int trailingZ (unsigned int n);
+
+// 6)
+int qDig (unsigned int n);
+
+// 7)
+char *mystrcat(char s1[], char s2[]) {
+    int i,j;
+
+    for(i = 0; s1[i] != '\0'; i++);
+
+    for(j = 0; s2[j] != '\0'; j++,i++) {
+        s1[i] = s2[j];
+    }
+    s1[j] = '\0';
+
+    return s1;
+}
+
+// 8)
+char *mystrcpy (char *dest, char source[]) {
+    int i;
+    for(i=0; source[i] != '\0'; i++) {
+        dest[i] = source[i];
+    }
+    dest[i] = '\0';
+
+    return dest;
+}
+
+// 9)
+int mystrcmp(char s1[], char s2[]) {
+    int i;
+    for(i = 0; s1[i] != '\0' && s2[i] != '\0' && s1[i] == s2[i]; i++);
+    return s1[i]-s2[i];
+}
+
+//10)
+char *mystrstr (char s1[], char s2[]) {
+    if(s2[0] == '\0') return s1;
+    int i,j;
+    char *res;
+    for(i=0;s1[i]!='\0' && res == NULL ;i++) {
+        for(j=0;s2[j]!='\0' && s2[j] == s1[i+j];j++)
+        if(s2[j] == '\0') res = s1 + i; // res fica a apontar para onde s2 ocurreu em s1
+    }
+    return res;
+}
+
+// 11)
+void strrev (char s[]) {
+    int i,j,k;
+    for(i=0;s[i]!='\0';i++);
+    
+    char aux[i];
+    
+    for(j=i-1,k=0;j>=0 && k<i; aux[k++] =s[j--]);
+    
+    int x;
+    for(x=0;x<i;x++) s[x] = aux[x];
+
+}
+
+// 12)
+
+void strnoV(char s[]) {
+    int i;
+    int pos = 0;
+    for(i=0;s[i] != '\0';i++) {
+        if(s[i]!='a' && s[i]!='e' && s[i]!='i' && s[i]!='o' && s[i]!='u' && s[i]!='A' && s[i]!='E' && s[i]!='I' && s[i]!='O' && s[i]!='U') {
+            s[pos++] = s[i];
+        }
+    }
+    s[pos] = '\0';
+}
+
+// 13) versao com uma complexidade muito alta
+
+void dropnext(char *t) {
+    while(*t =! NULL) {
+        *t = *(t+1);
+        t++;
+    }
+}
+
+void truncW (char t[], int n) {
+    int wordcount = 0;
+
+    while(*t != NULL) {
+        if(*t == ' ') {
+            t++;
+            wordcount = 0;
+        }
+        else {
+            wordcount++;
+            if(wordcount >= n) dropnext(t);
+            else t++;
+        }
+    }
+}
 
 // 14) 10/10
 
